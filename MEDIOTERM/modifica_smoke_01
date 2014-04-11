@@ -1,0 +1,70 @@
+
+int arraySize =100;
+int puffsAlive = 0;
+puff[] puffArray = new puff[50];
+int puffIndex = 0;
+
+
+void setup() {
+  size(1280, 720);
+  background(0);
+  fill(180, 8);
+  noStroke();
+  frameRate(30);
+}
+
+void draw() {
+  background(0);
+  if (puffsAlive > 0) {
+    for (int i = puffsAlive; i > 0 ; i--) {
+      int pos = (puffIndex-i);
+      
+      //trasparenza del tratto 
+      puffArray[pos].displayAndFade();
+      //dissolvenza del tratto nel tempo
+      puffArray[pos].timer--;
+    }
+  }
+
+  // creare elemento di fumo
+  if (mousePressed) {
+    puff temp;
+    temp = new puff(mouseX, mouseY);
+    puffArray[puffIndex] = temp;
+    puffArray[puffIndex].displayAndFade();
+    puffsAlive++;
+    puffIndex = (puffIndex+1)%50;
+  }
+  
+}
+
+//-------------------------------------------------
+
+class puff {
+  float x;
+  float y;
+  float[] randomX = new float[arraySize];
+  float[] randomY = new float[arraySize];
+  int timer = arraySize;
+  int radius = 60; 
+
+  
+  puff(float xpos, float ypos) {
+    x = xpos;
+    y = ypos;
+    for (int i = 0; i < arraySize; i++) {
+      
+      // diffusione nello spazio (rarefazione)
+      randomX[i] = random(-100, 10);
+      randomY[i] = random(-100, 10);
+    }
+  }
+
+  void displayAndFade() {
+    for (int i = 0; i < timer; i++) {
+      ellipse(x+randomX[i], y+randomY[i], radius, radius);
+    }
+    //  this.timer--;
+    //  println("timer: " + this.timer);
+  }
+}

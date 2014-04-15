@@ -1,7 +1,7 @@
 boolean shouldDraw;
 boolean hasDrawn;
 int minSize = 2; //say min size of elements
-int maxSize = 25; //say max size of elements
+int maxSize = 40; //say max size of elements
 int radius = 20; //make circular square
 
 //different color of background from the start to the end 
@@ -10,7 +10,7 @@ int radius = 20; //make circular square
 
 //velocity of moving element
 float velocityConstant = 0.05;
- 
+
 //creating class of element
 class Rectangle
 {
@@ -22,45 +22,45 @@ class Rectangle
   float r;
   color c;
 }
- 
+
 ArrayList <Rectangle> rectangles;
- 
+
 void setup()
 {
-  size(800, 600);
- background(255);
+  size(1280, 720);
+  background(255);
   //background(startBG);
   rectMode(CENTER);
   rectangles = new ArrayList<Rectangle>();
 }
- 
+
 void draw()
 {
   update();
   //background(lerpColor(startBG, endBG, (1 + sin(millis() * 0.0001)) / 2));
   background(lerpColor(255, 255, (1 + sin(millis() * 0.0001)) / 2));
-  for(Rectangle r : rectangles)
+  for (Rectangle r : rectangles)
   {
-      noStroke();
-      pushMatrix();
-      translate(r.position.x, r.position.y); //changing of rect position
-      rotate(r.rotation.z); //changing of rect rotation 
-     fill(r.c);  
-      rect(0, 0, r.w, r.h, r.r); 
-      popMatrix();
+    noStroke();
+    pushMatrix();
+    translate(r.position.x, r.position.y); //changing of rect position
+    rotate(r.rotation.z); //changing of rect rotation 
+    fill(r.c);  
+    rect(0, 0, r.w, r.h, r.r); 
+    popMatrix();
   }
 }
- 
+
 void update()
 {
-  if(shouldDraw && !hasDrawn)
+  if (shouldDraw && !hasDrawn)
   {
     drawBrushEffect();
   }
-  
-  for(Rectangle r : rectangles)
+
+  for (Rectangle r : rectangles)
   {
-    if(r.position.x < 0)
+    if (r.position.x < 0)
     {
       r.position.x = 1;
       r.velocity = calcReflection(r.velocity, fromAngle(90));
@@ -80,51 +80,51 @@ void update()
       r.position.y = height -1;
       r.velocity = calcReflection(r.velocity, fromAngle(180));
     }
-  
+
     r.position.add(PVector.mult(r.velocity, velocityConstant));
   }
 }
- 
+
 PVector fromAngle(float angle)
 {
   return new PVector(cos(radians(angle)), sin(radians(angle)));
 }
- 
+
 PVector calcReflection(PVector v, PVector n)
 {
-  return PVector.sub(PVector.mult(n, ( 2 * PVector.dot(v,n)/PVector.dot(n, n))), v);
+  return PVector.sub(PVector.mult(n, ( 2 * PVector.dot(v, n)/PVector.dot(n, n))), v);
 }
- 
+
 void mousePressed()
 {
   shouldDraw = true;
 }
- 
+
 void mouseReleased()
 {
   shouldDraw = false;
 }
- 
+
 void mouseMoved()
 {
   hasDrawn = false;
 }
- 
+
 void mouseDragged()
 {
   hasDrawn = false;
 }
- 
+
 void drawBrushEffect()
 {
   Rectangle r = new Rectangle();
-  r.c = color(216, 26, 37, random(200));
+  r.c = color(188, 26, 37, random(200));
   float randSize = minSize + random(maxSize);
   r.position = new PVector(mouseX + random(maxSize), mouseY + random(maxSize), 0);
   r.w = randSize;
   r.h = randSize;
   r.r = radius;
-  r.rotation = new PVector(0.0, 0.0, radians(random(0,360)));
+  r.rotation = new PVector(0.0, 0.0, radians(random(0, 360)));
   r.velocity = fromAngle(random(0, 360));
   rectangles.add(r);
   hasDrawn = true;
